@@ -1,9 +1,11 @@
 import React from 'react';
-import './App.css';
+import JockeList from './Components/JockeList'
+import './Assets/App.css';
 
 function App() {
   return (
     <div className="App">
+      <JockeList />
     </div>
   );
 }
