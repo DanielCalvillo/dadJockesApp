@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../Assets/JockeList.css' 
-import JockeLine from './JockeLine';
+import JokeLine from './JokeLine';
+import uuid from 'uuid/v4'
 import axios from 'axios'
 
 class JockeList extends Component {
@@ -11,24 +12,32 @@ class JockeList extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            jockes: []
+            jokes: []
         }
     }
 
     async componentDidMount() {
-        const jockeUrl = `https://icanhazdadjoke.com/`
+        const jokeUrl = `https://icanhazdadjoke.com/`
 
         let jokes = [];
 
         while(jokes.length < this.props.numJokesToGet) {
-            let response = await axios.get(jockeUrl, {
+            let response = await axios.get(jokeUrl, {
                 headers: { Accept: 'application/json' }
             });
-            jokes.push({text: response.data.joke, votes: 0})
+            jokes.push({id: uuid(), text: response.data.joke, votes: 0})
         }
 
         this.setState(st => ({
-            jockes: jokes
+            jokes: jokes
+        }))
+    }
+
+    handleVote(id, delta) {
+        this.setState(st => ({
+            jokes: st.jokes.map(j =>
+                j.id === id ? {...j, votes: j.votes + delta} : j
+                )
         }))
     }
 
@@ -41,12 +50,12 @@ class JockeList extends Component {
                         <span>Dad</span> Jokes
                     </h1>
                     <img src='https://assets.dryicons.com/uploads/icon/svg/8927/0eb14c71-38f2-433a-bfc8-23d9c99b3647.svg' />
-                    <button className='jockeList-getmore'>New Jockes</button>
+                    <button className='jockeList-getmore'>New Jokes</button>
                 </div>
 
                 <div className="JokeList-jokes">
                     {this.state.jockes.map( j => (
-                        <JockeLine votes={j.votes} text={j.text} />
+                        <JokeLine key={j.id} votes={j.votes} text={j.text} />
                     ))}
                 </div>
             </div>

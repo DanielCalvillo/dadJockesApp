@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class JockeLine extends Component {
+class JokeLine extends Component {
     constructor(props) {
         super(props)
     }
@@ -21,4 +21,4 @@ class JockeLine extends Component {
     }
 }
 
-export default JockeLine
+export default JokeLine
