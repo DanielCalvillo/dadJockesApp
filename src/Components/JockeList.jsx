@@ -14,6 +14,7 @@ class JockeList extends Component {
         this.state = {
             jokes: []
         }
+        this.handleVote = this.handleVote.bind(this)
     }
 
     async componentDidMount() {
@@ -54,8 +55,14 @@ class JockeList extends Component {
                 </div>
 
                 <div className="JokeList-jokes">
-                    {this.state.jockes.map( j => (
-                        <JokeLine key={j.id} votes={j.votes} text={j.text} />
+                    {this.state.jokes.map( j => (
+                        <JokeLine 
+                            key={j.id} 
+                            votes={j.votes} 
+                            text={j.text} 
+                            upvote={() => this.handleVote(j.id, 1)} 
+                            downvote={() => this.handleVote(j.id, -1)}
+                        />
                     ))}
                 </div>
             </div>
