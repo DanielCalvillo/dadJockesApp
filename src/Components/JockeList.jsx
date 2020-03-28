@@ -12,16 +12,21 @@ class JockeList extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            jokes: []
+            jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]")
         }
         this.handleVote = this.handleVote.bind(this)
+        this.getJokes = this.getJokes.bind(this);
     }
 
-    async componentDidMount() {
+    componentDidMount() {
+        if(this.state.jokes.length === 0) {
+            this.getJokes();
+        }
+    }
+
+    async getJokes() {
         const jokeUrl = `https://icanhazdadjoke.com/`
-
         let jokes = [];
-
         while(jokes.length < this.props.numJokesToGet) {
             let response = await axios.get(jokeUrl, {
                 headers: { Accept: 'application/json' }
@@ -32,6 +37,10 @@ class JockeList extends Component {
         this.setState(st => ({
             jokes: jokes
         }))
+        window.localStorage.setItem(
+            "jokes",
+            JSON.stringify(jokes)
+        )
     }
 
     handleVote(id, delta) {
