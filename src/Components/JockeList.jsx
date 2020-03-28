@@ -24,7 +24,7 @@ class JockeList extends Component {
             let response = await axios.get(jockeUrl, {
                 headers: { Accept: 'application/json' }
             });
-            jokes.push(response.data.joke)
+            jokes.push({text: response.data.joke, votes: 0})
         }
 
         this.setState(st => ({
@@ -46,7 +46,7 @@ class JockeList extends Component {
 
                 <div className="JokeList-jokes">
                     {this.state.jockes.map( j => (
-                        <div>{j}</div>
+                        <JockeLine votes={j.votes} text={j.text} />
                     ))}
                 </div>
             </div>
