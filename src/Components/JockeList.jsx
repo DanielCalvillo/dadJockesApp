@@ -15,6 +15,8 @@ class JockeList extends Component {
             jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]"),
             loading: false
         }
+        this.seenJokes = new Set(this.state.jokes.map( j => j.text));
+
         this.handleVote = this.handleVote.bind(this)
         this.getJokes = this.getJokes.bind(this);
         this.handleClick = this.handleClick.bind(this)
@@ -27,22 +29,35 @@ class JockeList extends Component {
     }
 
     async getJokes() {
-        const jokeUrl = `https://icanhazdadjoke.com/`
-        let jokes = [];
-        while(jokes.length < this.props.numJokesToGet) {
-            let response = await axios.get(jokeUrl, {
-                headers: { Accept: 'application/json' }
-            });
-            jokes.push({id: uuid(), text: response.data.joke, votes: 0})
-        }
+        try {
+            const jokeUrl = `https://icanhazdadjoke.com/`
+            let jokes = [];
+            while(jokes.length < this.props.numJokesToGet) {
+                let response = await axios.get(jokeUrl, {
+                    headers: { Accept: 'application/json' }
+                });
+                let newJoke = response.data.joke
+                if (!this.seenJokes.has(newJoke)) {
+                    jokes.push({id: uuid(), text: newJoke, votes: 0})
+                } else {
+                    console.log("Founded a duplicate!", newJoke);
+                }
+                
+            }
 
-        this.setState(st => ({
-            loading: false,
-            jokes: [...st.jokes, ...jokes]
-        }),
-        () =>  window.localStorage.setItem("jokes", JSON.stringify
-        (this.state.jokes))
-        )
+            this.setState(st => ({
+                loading: false,
+                jokes: [...st.jokes, ...jokes]
+            }),
+            () =>  window.localStorage.setItem("jokes", JSON.stringify
+            (this.state.jokes))
+            )
+        } catch(e) {
+           alert(e) 
+           this.setState({
+               loading: false
+           })
+        }
     }
 
     handleVote(id, delta) {
