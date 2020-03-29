@@ -95,7 +95,7 @@ class JockeList extends Component {
                         <span>Dad</span> Jokes
                     </h1>
                     <img src='https://assets.dryicons.com/uploads/icon/svg/8927/0eb14c71-38f2-433a-bfc8-23d9c99b3647.svg' />
-                    <button className='jockeList-getmore' onClick={this.handleClick}>New Jokes</button>
+                    <button className='JokeList-getmore' onClick={this.handleClick}>New Jokes</button>
                 </div>
 
                 <div className="JokeList-jokes">
